@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Atib | Advanced Protein Calculator & Fitness Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#ff2a2a',
+                        brandDark: '#050505',
+                    },
+                    boxShadow: {
+                        'neon': '0 0 15px rgba(255, 42, 42, 0.5)',
+                        'neon-hover': '0 0 25px rgba(255, 42, 42, 0.8)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Inter:wght@300;400;600;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; overflow-x: hidden; }
+        h1, h2, h3, .heading-font { font-family: 'Teko', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Glassmorphism */
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #ff2a2a; border-radius: 4px; }
+        
+        /* Modal Animation */
+        .modal-enter { animation: modalFadeIn 0.3s ease-out forwards; }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Table Sticky Header */
+        .sticky-header th { position: sticky; top: 0; z-index: 10; background-color: #111; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative">
+
+    <!-- Navbar -->
+    <nav class="glass-panel fixed w-full z-40 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-4xl font-bold text-white tracking-wider">
+                FIT<span class="text-brandRed">ATIB</span>
+            </h1>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-widest uppercase">
+                <a href="#" class="text-gray-400 hover:text-brandRed transition duration-300">Home</a>
+                <a href="#about" class="text-gray-400 hover:text-brandRed transition duration-300">Science</a>
+                <a href="#calculator" class="text-gray-400 hover:text-brandRed transition duration-300">Calculator</a>
+                <a href="#articles" class="text-gray-400 hover:text-brandRed transition duration-300">Articles</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-[85vh] flex items-center justify-center bg-[url('https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat bg-fixed">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-[#050505]"></div>
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-20" data-aos="zoom-in" data-aos-duration="1000">
+            <h2 class="text-6xl md:text-8xl font-bold heading-font mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                UNLOCK YOUR <span class="text-brandRed">TRUE POTENTIAL</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-3xl mx-auto leading-relaxed">
+                Welcome to <strong>Fit Atib</strong>. Your journey to a better physique starts in the kitchen. 
+                Nutrition is 70% of the game. Use our advanced macro calculator or explore our massive database of protein sources.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#calculator" class="inline-block bg-gradient-to-r from-brandRed to-red-800 text-white font-bold py-4 px-8 rounded-sm text-lg uppercase tracking-widest shadow-neon hover:shadow-neon-hover transform hover:-translate-y-1 transition-all duration-300">
+                    Calculate Macros
+                </a>
+                <!-- New Database Button -->
+                <button onclick="openDatabaseModal()" class="inline-block bg-transparent border-2 border-brandRed text-white font-bold py-4 px-8 rounded-sm text-lg uppercase tracking-widest hover:bg-brandRed hover:shadow-neon transform hover:-translate-y-1 transition-all duration-300">
+                    <i class="fas fa-database mr-2"></i> Protein Database
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Detailed About / Science Section -->
+    <section id="about" class="py-24 px-4 w-full border-b border-gray-900">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div data-aos="fade-right">
+                <h3 class="text-5xl heading-font text-white mb-6">The Science Behind <span class="text-brandRed">Muscle Growth</span></h3>
+                <p class="text-gray-300 text-lg mb-6 leading-relaxed font-light">
+                    When you are lifting heavy weights in the gym, you aren't actually building muscle—you are breaking it down. Training creates microscopic tears in your muscle fibers. The real magic happens when you step out of the gym, fueled primarily by <strong class="text-white">Protein</strong>.
+                </p>
+                <div class="space-y-6 mb-8">
+                    <div class="glass-panel p-5 rounded-lg border-l-4 border-brandRed">
+                        <h4 class="text-xl font-bold text-white mb-2">Protein Synthesis</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed">To build muscle, your body's rate of muscle protein synthesis must exceed the rate of muscle protein breakdown. High-quality protein ensures your body has the necessary amino acids.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative grid grid-cols-2 gap-4" data-aos="fade-left">
+                <div class="absolute inset-0 bg-brandRed blur-[100px] opacity-20 rounded-full"></div>
+                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop" alt="Gym Workout" class="relative z-10 rounded-xl shadow-2xl border border-gray-800 object-cover h-full min-h-[300px]">
+                <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1470&auto=format&fit=crop" alt="Dumbbells" class="relative z-10 rounded-xl shadow-2xl border border-gray-800 object-cover h-full min-h-[300px] mt-8">
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="py-24 px-4 w-full">
+        <div class="max-w-4xl mx-auto glass-panel rounded-2xl shadow-2xl p-8 md:p-12" data-aos="fade-up">
+            <h3 class="text-5xl font-bold heading-font mb-4 text-center text-brandRed">Fit Atib Calculator</h3>
+            <p class="text-center text-gray-400 mb-8 pb-6 border-b border-gray-800">Enter your accurate details below to calculate your daily macro needs.</p>
+            
+            <form id="proteinForm" class="space-y-8">
+                <div class="flex flex-col sm:flex-row justify-center gap-6 mb-6">
+                    <div class="flex items-center space-x-3 bg-black/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-gray-400 text-sm font-semibold uppercase px-2">Height:</span>
+                        <select id="heightUnit" class="bg-transparent text-white font-bold focus:outline-none cursor-pointer">
+                            <option value="cm">CM</option>
+                            <option value="ft">Feet/Inches</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-3 bg-black/50 p-2 rounded-lg border border-gray-800">
+                        <span class="text-gray-400 text-sm font-semibold uppercase px-2">Weight:</span>
+                        <select id="weightUnit" class="bg-transparent text-white font-bold focus:outline-none cursor-pointer">
+                            <option value="kg">KG</option>
+                            <option value="lbs">LBS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="group">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition">Age</label>
+                        <input type="number" id="age" required min="12" max="100" class="w-full bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                    </div>
+                    <div class="group">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition">Gender</label>
+                        <select id="gender" class="w-full bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="group">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition" id="weightLabel">Weight (KG)</label>
+                        <input type="number" id="weight" required min="30" max="400" class="w-full bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                    </div>
+                    <div class="group" id="heightContainerCm">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition">Height (CM)</label>
+                        <input type="number" id="heightCm" min="100" max="250" class="w-full bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                    </div>
+                    <div class="group hidden" id="heightContainerFt">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition">Height</label>
+                        <div class="flex gap-4">
+                            <input type="number" id="heightFt" placeholder="Ft" min="3" max="8" class="w-1/2 bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                            <input type="number" id="heightIn" placeholder="In" min="0" max="11" class="w-1/2 bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 group">
+                        <label class="block text-gray-400 text-sm uppercase tracking-wider mb-2 font-semibold group-hover:text-brandRed transition">Fitness Goal</label>
+                        <select id="goal" class="w-full bg-black/50 border border-gray-700 rounded p-4 text-white focus:outline-none focus:border-brandRed transition-colors">
+                            <option value="maintain">Maintain Weight (1.6g / kg)</option>
+                            <option value="build">Build Muscle (2.2g / kg)</option>
+                            <option value="lose">Lose Fat & Keep Muscle (2.4g / kg)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-brandRed text-white font-bold py-5 rounded-sm text-xl uppercase tracking-widest hover:bg-red-700 transition duration-300 shadow-neon">
+                    <i class="fas fa-bolt mr-2"></i> Calculate Macros
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="resultsSection" class="py-16 px-4 w-full hidden border-b border-gray-900">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl heading-font text-gray-400 mb-2">Daily Protein Target</h3>
+                <div class="text-8xl font-black heading-font text-brandRed drop-shadow-[0_0_20px_rgba(255,42,42,0.6)]" id="proteinResult">0g</div>
+            </div>
+            
+            <!-- Budget Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-6 mb-10">
+                <button id="lowBudgetBtn" class="flex-1 glass-panel hover:bg-[#1a1a1a] border border-gray-700 rounded-lg p-8 text-center transition-all duration-300 group shadow-lg">
+                    <i class="fas fa-wallet text-5xl text-gray-300 mb-4 group-hover:text-green-500 transition-colors"></i>
+                    <h4 class="text-3xl heading-font text-white mb-2">Economy / Low Budget</h4>
+                </button>
+                <button id="highBudgetBtn" class="flex-1 glass-panel hover:bg-[#1a1a1a] border border-gray-700 rounded-lg p-8 text-center transition-all duration-300 group shadow-lg">
+                    <i class="fas fa-crown text-5xl text-gray-300 mb-4 group-hover:text-yellow-500 transition-colors"></i>
+                    <h4 class="text-3xl heading-font text-white mb-2">Premium / High Budget</h4>
+                </button>
+            </div>
+
+            <!-- Full Database Button (Visible after calculating) -->
+            <div class="text-center mb-16">
+                <button onclick="openDatabaseModal()" class="w-full sm:w-auto glass-panel border border-gray-500 hover:border-brandRed text-white font-bold py-4 px-10 rounded-sm text-sm uppercase tracking-widest hover:bg-brandRed hover:shadow-neon transition-all duration-300">
+                    <i class="fas fa-list mr-2"></i> Or Browse 35+ Complete Protein Sources Table
+                </button>
+            </div>
+
+            <div id="foodSourcesContainer" class="hidden">
+                <h3 class="text-4xl heading-font text-brandRed mb-8 border-l-4 border-brandRed pl-4" id="sourceTitle">Main Sources</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="mainFoodGrid"></div>
+                <div class="flex items-center my-12">
+                    <div class="flex-grow border-t border-gray-800"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-500 text-sm uppercase tracking-widest font-bold border border-gray-800 px-4 py-1 rounded-full">Extra Sources</span>
+                    <div class="flex-grow border-t border-gray-800"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="extraFoodGrid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section id="articles" class="py-24 px-4 w-full relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h3 class="text-5xl heading-font text-white mb-4">Knowledge is <span class="text-brandRed">Power</span></h3>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Click on the articles below to read detailed insights on training, nutrition, and recovery.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <article class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-gray-800 hover:border-brandRed transition-all duration-300 shadow-lg" data-aos="fade-up" onclick="openModal('article1')">
+                    <div class="h-56 article-img-container">
+                        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1500&auto=format&fit=crop" alt="Consistency" class="w-full h-full object-cover article-img">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-brandRed text-xs font-bold uppercase tracking-widest mb-2 block">Motivation</span>
+                        <h4 class="text-2xl heading-font text-white mb-3">Consistency Over Perfection</h4>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">You don't need a perfect diet or a perfect workout plan. You just need to show up every single day...</p>
+                        <button class="text-white hover:text-brandRed text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center">
+                            Read Full Article <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-gray-800 hover:border-brandRed transition-all duration-300 shadow-lg" data-aos="fade-up" data-aos-delay="100" onclick="openModal('article2')">
+                    <div class="h-56 article-img-container">
+                        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop" alt="Hypertrophy" class="w-full h-full object-cover article-img">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-brandRed text-xs font-bold uppercase tracking-widest mb-2 block">Science & Training</span>
+                        <h4 class="text-2xl heading-font text-white mb-3">The Science of Hypertrophy</h4>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Progressive overload is the key to muscle growth. Learn how gradually increasing weight transforms your physique...</p>
+                        <button class="text-white hover:text-brandRed text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center">
+                            Read Full Article <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-xl overflow-hidden group cursor-pointer border border-gray-800 hover:border-brandRed transition-all duration-300 shadow-lg" data-aos="fade-up" data-aos-delay="200" onclick="openModal('article3')">
+                    <div class="h-56 article-img-container">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1500&auto=format&fit=crop" alt="Recovery" class="w-full h-full object-cover article-img">
+                    </div>
+                    <div class="p-6">
+                        <span class="text-brandRed text-xs font-bold uppercase tracking-widest mb-2 block">Health & Recovery</span>
+                        <h4 class="text-2xl heading-font text-white mb-3">Rest: The Unsung Hero</h4>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-3">Overtraining is real. If you are not sleeping 7-8 hours a day, you are leaving gains on the table...</p>
+                        <button class="text-white hover:text-brandRed text-sm font-bold uppercase tracking-wider transition-colors inline-flex items-center">
+                            Read Full Article <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- FULL DATABASE MODAL -->
+    <div id="databaseModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-md overflow-y-auto w-full h-full">
+        <div class="max-w-6xl mx-auto my-10 relative px-4 modal-enter">
+            <button onclick="closeDatabaseModal()" class="absolute -top-4 -right-2 md:top-0 md:right-4 bg-brandRed text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all z-20 shadow-neon">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div class="glass-panel rounded-2xl border border-gray-800 shadow-2xl mt-6 p-6 md:p-10">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl md:text-5xl heading-font text-white mb-2">Ultimate Protein <span class="text-brandRed">Database</span></h2>
+                    <p class="text-gray-400">A comprehensive list of protein sources to help you hit your daily macro goals.</p>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg border border-gray-800 h-[600px] overflow-y-auto custom-scrollbar relative">
+                    <table class="w-full text-left border-collapse whitespace-nowrap md:whitespace-normal">
+                        <thead class="sticky-header">
+                            <tr class="text-brandRed text-sm uppercase tracking-widest border-b border-gray-800">
+                                <th class="p-4 font-bold w-1/4">Food Source</th>
+                                <th class="p-4 font-bold w-1/6">Protein (per 100g)</th>
+                                <th class="p-4 font-bold w-1/6">Category</th>
+                                <th class="p-4 font-bold w-5/12">Digestion & Details (1-Line Info)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="databaseTableBody" class="text-gray-300 text-sm">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Modal Overlay -->
+    <div id="articleModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-md overflow-y-auto w-full h-full">
+        <div class="max-w-4xl mx-auto my-10 relative px-4 modal-enter">
+            <button onclick="closeModal()" class="absolute top-0 right-4 bg-brandRed text-white w-12 h-12 rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all z-10 shadow-neon">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="modalContent" class="glass-panel rounded-2xl overflow-hidden border border-gray-800 shadow-2xl mt-6"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#030303] py-10 mt-auto border-t border-gray-900 text-center">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold text-white tracking-wider mb-4 md:mb-0">
+                FIT<span class="text-brandRed">ATIB</span>
+            </h1>
+            <p class="text-gray-600 text-sm tracking-wider font-semibold">
+                &copy; 2026 FIT ATIB. ENGINEERED FOR AESTHETICS.
+            </p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=atibimam4@gmail.com" target="_blank" class="text-gray-500 hover:text-brandRed transition-all transform hover:scale-110" title="Email Atib">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </a>
+                <a href="https://www.instagram.com/atibimam_" target="_blank" class="text-gray-500 hover:text-brandRed transition-all transform hover:scale-110" title="Instagram">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/95', 'shadow-lg', 'border-b', 'border-gray-800');
+                nav.classList.remove('glass-panel');
+            } else {
+                nav.classList.remove('bg-black/95', 'shadow-lg', 'border-b', 'border-gray-800');
+                nav.classList.add('glass-panel');
+            }
+        });
+
+        // --- FULL PROTEIN DATABASE LOGIC ---
+        const proteinDatabaseList = [
+            { name: "Chicken Breast", protein: "31g", category: "Animal-Based (Meat)", desc: "Fast-medium digesting, extremely lean and complete amino profile." },
+            { name: "Whey Protein Isolate", protein: "85g - 90g", category: "Supplement", desc: "Ultra-fast absorbing, perfect for immediate post-workout recovery." },
+            { name: "Beef Steak (Lean)", protein: "26g", category: "Animal-Based (Meat)", desc: "Medium digesting, rich in natural creatine, iron, and zinc." },
+            { name: "Whole Eggs", protein: "13g", category: "Animal-Based (Dairy/Poultry)", desc: "Medium digesting, holds the highest biological value of any whole food." },
+            { name: "Egg Whites", protein: "11g", category: "Animal-Based (Poultry)", desc: "Fast digesting, virtually zero fat and zero carbs." },
+            { name: "Soya Chunks", protein: "52g", category: "Plant-Based (Soy)", desc: "Medium digesting, highest protein concentration in cheap plant foods." },
+            { name: "Turkey Breast", protein: "29g", category: "Animal-Based (Meat)", desc: "Fast-medium digesting, very similar to chicken but slightly leaner." },
+            { name: "Tuna (Canned in water)", protein: "28g", category: "Animal-Based (Seafood)", desc: "Fast digesting, extremely low calorie and high protein ratio." },
+            { name: "Salmon", protein: "22g", category: "Animal-Based (Seafood)", desc: "Medium digesting, packed with heart-healthy Omega-3 fatty acids." },
+            { name: "Rohu Fish", protein: "18g", category: "Animal-Based (Seafood)", desc: "Fast digesting, local market staple with good healthy fats." },
+            { name: "Shrimp / Prawns", protein: "24g", category: "Animal-Based (Seafood)", desc: "Fast digesting, very low in calories, mostly pure protein." },
+            { name: "Greek Yogurt", protein: "10g", category: "Animal-Based (Dairy)", desc: "Medium-slow digesting, great for gut microbiome and satiation." },
+            { name: "Milk (Whole)", protein: "3.4g", category: "Animal-Based (Dairy)", desc: "Blend of whey (fast) and casein (slow), great for bulking." },
+            { name: "Cottage Cheese (Paneer)", protein: "14g", category: "Animal-Based (Dairy)", desc: "Very slow digesting casein protein, best eaten before bed." },
+            { name: "Casein Protein Powder", protein: "75g", category: "Supplement", desc: "Ultra-slow digesting, drips aminos into muscles overnight." },
+            { name: "Lentils (Daal - Cooked)", protein: "9g", category: "Plant-Based (Legume)", desc: "Slow digesting, high in dietary fiber and complex carbs." },
+            { name: "Chickpeas (Chana - Raw)", protein: "19g", category: "Plant-Based (Legume)", desc: "Slow digesting, excellent plant protein with high energy carbs." },
+            { name: "Kidney Beans (Rajma)", protein: "24g (Raw)", category: "Plant-Based (Legume)", desc: "Slow digesting, very fibrous, needs combining with rice for full aminos." },
+            { name: "Tofu", protein: "8g - 15g", category: "Plant-Based (Soy)", desc: "Medium digesting, highly versatile complete plant protein." },
+            { name: "Tempeh", protein: "19g", category: "Plant-Based (Soy)", desc: "Medium digesting, fermented soy which is very easy on the gut." },
+            { name: "Peanut Butter", protein: "25g", category: "Plant-Based (Nuts)", desc: "Slow digesting, very calorie-dense, ideal for weight gain." },
+            { name: "Almonds", protein: "21g", category: "Plant-Based (Nuts)", desc: "Slow digesting, rich in Vitamin E and healthy monounsaturated fats." },
+            { name: "Pumpkin Seeds", protein: "19g", category: "Plant-Based (Seeds)", desc: "Slow digesting, exceptionally high in magnesium and zinc." },
+            { name: "Chia Seeds", protein: "17g", category: "Plant-Based (Seeds)", desc: "Slow digesting, expands in stomach, very high in Omega-3s." },
+            { name: "Hemp Seeds", protein: "31g", category: "Plant-Based (Seeds)", desc: "Medium digesting, one of the few complete plant protein sources." },
+            { name: "Quinoa (Cooked)", protein: "4.4g", category: "Plant-Based (Grain)", desc: "Medium digesting, a grain that acts like a complete protein." },
+            { name: "Oats (Raw)", protein: "13g", category: "Plant-Based (Grain)", desc: "Slow digesting, primarily a carb source but has decent protein." },
+            { name: "Seitan (Wheat Gluten)", protein: "75g", category: "Plant-Based (Wheat)", desc: "Medium digesting, incredible protein density but lacks some aminos." },
+            { name: "Edamame", protein: "11g", category: "Plant-Based (Soy)", desc: "Medium digesting, young soybeans that make a great healthy snack." },
+            { name: "Spirulina", protein: "57g", category: "Plant-Based (Algae)", desc: "Fast digesting, nutrient powerhouse usually taken in small doses." },
+            { name: "Mutton (Goat)", protein: "25g", category: "Animal-Based (Meat)", desc: "Slow-medium digesting, high calorie red meat rich in B-vitamins." },
+            { name: "Tilapia", protein: "26g", category: "Animal-Based (Seafood)", desc: "Fast digesting, very budget-friendly lean white fish." },
+            { name: "Cheddar Cheese", protein: "25g", category: "Animal-Based (Dairy)", desc: "Slow digesting, high fat and calorie content, good for bulking." },
+            { name: "Duck Meat", protein: "19g", category: "Animal-Based (Meat)", desc: "Medium digesting, higher fat content than chicken but very rich flavor." },
+            { name: "Soybeans (Roasted)", protein: "36g", category: "Plant-Based (Soy)", desc: "Medium digesting, the highest protein legume available." }
+        ];
+
+        function openDatabaseModal() {
+            const tbody = document.getElementById('databaseTableBody');
+            tbody.innerHTML = ''; // clear existing
+            
+            proteinDatabaseList.forEach(item => {
+                let categoryColor = 'text-gray-300';
+                if(item.category.includes('Animal')) categoryColor = 'text-red-400';
+                if(item.category.includes('Plant')) categoryColor = 'text-green-400';
+                if(item.category.includes('Supplement')) categoryColor = 'text-blue-400';
+
+                const tr = `
+                    <tr class="border-b border-gray-800 hover:bg-[#111] transition-colors">
+                        <td class="p-4 font-bold text-white">${item.name}</td>
+                        <td class="p-4 font-black text-brandRed">${item.protein}</td>
+                        <td class="p-4 font-semibold ${categoryColor}">${item.category}</td>
+                        <td class="p-4 text-gray-400">${item.desc}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += tr;
+            });
+
+            document.getElementById('databaseModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDatabaseModal() {
+            document.getElementById('databaseModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('databaseModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDatabaseModal();
+        });
+
+
+        // --- Article Modal Logic ---
+        const articlesDatabase = {
+            article1: {
+                tag: "Motivation", title: "Consistency Over Perfection",
+                img: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1500&auto=format&fit=crop",
+                content: `<p class="mb-4">One of the biggest mistakes beginners make in fitness is striving for absolute perfection. They want the perfect workout plan, the perfect diet, and the perfect supplement stack. But the truth is, perfection is the enemy of progress.</p><p class="mb-4"><strong>Discipline trumps motivation.</strong> Motivation is a feeling, and feelings fade. Some days you will wake up tired, stressed, or simply not wanting to train. That is when consistency steps in. A mediocre workout done consistently over 5 years will always yield better results than a perfect workout done inconsistently.</p><ul class="list-disc pl-6 mb-4 space-y-2 text-gray-300"><li>Set realistic goals.</li><li>Track your progress.</li><li>Forgive yourself. Don't let one mistake ruin the whole week.</li></ul><p>Remember, building a great physique is a marathon, not a sprint.</p>`
+            },
+            article2: {
+                tag: "Science & Training", title: "The Science of Hypertrophy",
+                img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
+                content: `<p class="mb-4">Hypertrophy simply means an increase and growth of muscle cells. But how do we trigger it optimally? The answer lies in <strong>Progressive Overload</strong> and <strong>Mechanical Tension</strong>.</p><p class="mb-4">When you lift a weight, your muscle experiences mechanical tension. To adapt to this stress, the body signals for the muscle to grow thicker and stronger.</p><h5 class="text-xl font-bold text-white mb-2 mt-6">Rules for Maximum Hypertrophy:</h5><ul class="list-disc pl-6 mb-4 space-y-2 text-gray-300"><li><strong>Rep Ranges:</strong> 8-12 reps per set is generally considered the sweet spot.</li><li><strong>Proximity to Failure:</strong> You must push the muscle close to its limit (1-2 reps shy of failure).</li><li><strong>Mind-Muscle Connection:</strong> Focus on feeling the specific muscle stretching and contracting.</li></ul>`
+            },
+            article3: {
+                tag: "Health & Recovery", title: "Rest: The Unsung Hero",
+                img: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1500&auto=format&fit=crop",
+                content: `<p class="mb-4">In the fitness community, there is a popular saying: "No Days Off." Scientifically speaking, this is terrible advice. You do not build muscle in the gym; you build muscle in your bed while you sleep.</p><p class="mb-4"><strong>The Role of Sleep:</strong> During deep sleep, your body releases the highest concentration of Human Growth Hormone (HGH) and testosterone.</p><h5 class="text-xl font-bold text-white mb-2 mt-6">Central Nervous System (CNS) Fatigue:</h5><p class="mb-4">Lifting heavy weights fatigues your nervous system. If your CNS is fried, your strength will drop, and your risk of injury skyrockets.</p><ul class="list-disc pl-6 mb-4 space-y-2 text-gray-300"><li>Aim for 7-9 hours of quality sleep per night.</li><li>Stay hydrated.</li><li>Use active recovery on rest days (like light walking or stretching).</li></ul>`
+            }
+        };
+
+        function openModal(id) {
+            const data = articlesDatabase[id];
+            const contentDiv = document.getElementById('modalContent');
+            contentDiv.innerHTML = `
+                <img src="${data.img}" alt="${data.title}" class="w-full h-72 object-cover">
+                <div class="p-8 md:p-12">
+                    <span class="text-brandRed text-sm font-bold uppercase tracking-widest mb-2 block">${data.tag}</span>
+                    <h2 class="text-4xl heading-font text-white mb-6">${data.title}</h2>
+                    <div class="text-gray-300 leading-relaxed text-lg font-light">${data.content}</div>
+                </div>
+            `;
+            document.getElementById('articleModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('articleModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('articleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // --- Calculator Logic ---
+        const dietData = {
+            low: {
+                main: [
+                    { name: "Whole Eggs", protein: "6g per egg", price: "Rs. 30 - 35 / egg", icon: "fa-egg", color: "text-white", desc: "Best bioavailable protein." },
+                    { name: "Local Chicken Breast", protein: "31g per 100g", price: "Rs. 1,000 - 1,200 / kg", icon: "fa-drumstick-bite", color: "text-orange-200", desc: "Most common and affordable lean meat source." },
+                    { name: "Milk (Khula Doodh)", protein: "8g per 250ml", price: "Rs. 220 - 250 / liter", icon: "fa-glass-water", color: "text-blue-100", desc: "Excellent source of casein for slow digestion at night." }
+                ],
+                extra: [
+                    { name: "Lentils (Daal Chana)", protein: "9g per 100g", price: "Rs. 300 - 350 / kg", icon: "fa-bowl-rice", color: "text-yellow-500", desc: "Cheap plant protein, mix with rice." },
+                    { name: "White Chickpeas", protein: "19g per 100g", price: "Rs. 350 - 450 / kg", icon: "fa-leaf", color: "text-green-400", desc: "Very high in fiber and protein." },
+                    { name: "Peanut Butter", protein: "25g per 100g", price: "Rs. 800 - 1,000 / jar", icon: "fa-spoon", color: "text-amber-600", desc: "High calories and healthy fats." }
+                ]
+            },
+            high: {
+                main: [
+                    { name: "Whey Protein Isolate", protein: "25g per scoop", price: "Rs. 18,000 - 22,000 / tub", icon: "fa-jar", color: "text-gray-300", desc: "Fast-absorbing, pure protein." },
+                    { name: "Beef Steak", protein: "26g per 100g", price: "Rs. 1,200 - 1,500 / kg", icon: "fa-burger", color: "text-red-600", desc: "Rich in iron and natural creatine." },
+                    { name: "Fish (Surmai / Rohu)", protein: "22g per 100g", price: "Rs. 1,500 - 2,500 / kg", icon: "fa-fish", color: "text-blue-400", desc: "Excellent source of clean protein and Omega-3." }
+                ],
+                extra: [
+                    { name: "Greek Yogurt", protein: "10g per 100g", price: "Rs. 400 - 600 / pack", icon: "fa-bowl-food", color: "text-pink-100", desc: "Great for gut health and slow digestion." },
+                    { name: "Mutton / Lamb", protein: "25g per 100g", price: "Rs. 2,200 - 2,500 / kg", icon: "fa-drumstick-bite", color: "text-red-400", desc: "High quality red meat, rich in vitamins." },
+                    { name: "Mixed Nuts", protein: "21g per 100g", price: "Rs. 2,500 - 4,000 / kg", icon: "fa-cubes", color: "text-yellow-700", desc: "Premium snacking for healthy fats." }
+                ]
+            }
+        };
+
+        const heightUnit = document.getElementById('heightUnit');
+        const weightUnit = document.getElementById('weightUnit');
+        
+        heightUnit.addEventListener('change', (e) => {
+            if(e.target.value === 'cm') {
+                document.getElementById('heightContainerCm').classList.remove('hidden');
+                document.getElementById('heightContainerFt').classList.add('hidden');
+            } else {
+                document.getElementById('heightContainerCm').classList.add('hidden');
+                document.getElementById('heightContainerFt').classList.remove('hidden');
+            }
+        });
+
+        weightUnit.addEventListener('change', (e) => {
+            document.getElementById('weightLabel').innerText = e.target.value === 'kg' ? 'Weight (KG)' : 'Weight (LBS)';
+        });
+
+        document.getElementById('proteinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let weight = parseFloat(document.getElementById('weight').value);
+            if(weightUnit.value === 'lbs') weight = weight * 0.453592;
+            
+            const goal = document.getElementById('goal').value;
+            let multiplier = 1.6;
+            if (goal === 'build') multiplier = 2.2;
+            if (goal === 'lose') multiplier = 2.4;
+
+            const targetProtein = Math.round(weight * multiplier);
+            document.getElementById('proteinResult').innerText = targetProtein + "g";
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('foodSourcesContainer').classList.add('hidden');
+        });
+
+        function renderCards(gridId, dataArray) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            dataArray.forEach((item) => {
+                const card = `
+                    <div class="glass-panel p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 transform hover:-translate-y-2 hover:shadow-neon">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex items-center">
+                                <div class="w-14 h-14 rounded-full bg-black flex items-center justify-center mr-4 border border-gray-700">
+                                    <i class="fas ${item.icon} text-2xl ${item.color}"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-bold font-sans">${item.name}</h4>
+                                    <div class="text-brandRed font-black text-lg tracking-wide">${item.protein}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 rounded-lg p-3 mb-3 border border-gray-800 flex items-center justify-between">
+                            <span class="text-xs text-gray-500 uppercase font-bold tracking-wider">Est. Price</span>
+                            <span class="text-green-400 font-bold">${item.price}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed">${item.desc}</p>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        function showDietPlan(type) {
+            document.getElementById('sourceTitle').innerText = type === 'low' ? 'Economy Diet Plan' : 'Premium Diet Plan';
+            renderCards('mainFoodGrid', dietData[type].main);
+            renderCards('extraFoodGrid', dietData[type].extra);
+            const container = document.getElementById('foodSourcesContainer');
+            container.classList.remove('hidden');
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.getElementById('lowBudgetBtn').addEventListener('click', () => showDietPlan('low'));
+        document.getElementById('highBudgetBtn').addEventListener('click', () => showDietPlan('high'));
+    </script>
+</body>
+</html>
